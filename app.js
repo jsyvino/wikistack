@@ -10,6 +10,13 @@ const bodyParser = require('body-parser');
 const env = nunjucks.configure('views', { noCache: true }); // where to find the views, caching off
 const route = require('./routes/index.js');
 
+var urlFunc = function(str){
+    if(!str){
+      console.log(str);
+       return "New_Page"+Math.floor(Math.random()*100);
+    } else return output= str.replace(/[\W]+/g, "_").trim();
+  };
+
 app.set('view engine', 'html'); // what file extension do our templates have
 app.engine('html', nunjucks.render); // how to render html templates
 
@@ -22,9 +29,7 @@ app.use('/', route);
 
 
 
-// app.get('/', function (req, res){
-//     res.render('index.html')
-// })
+
 
 
 

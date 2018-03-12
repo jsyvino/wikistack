@@ -1,6 +1,13 @@
 const Sequelize = require('sequelize');
 const db = new Sequelize('postgres://localhost:5432/wikistack');
 
+var urlFunc = function(str){
+    if(!str){
+      console.log(str);
+       return "New_Page"+Math.floor(Math.random()*100);
+    } else return output= str.replace(/[\W]+/g, "_").trim();
+  };
+
 const Page = db.define('pages', {
     title: {
         type: Sequelize.STRING,
@@ -8,7 +15,6 @@ const Page = db.define('pages', {
     }, 
     urlTitle: {
         type: Sequelize.STRING,
-        validate: {isURL: true},
         allowNull: false,
         get() {
             const route = this.getDataValue('urlName');
@@ -26,8 +32,13 @@ const Page = db.define('pages', {
         defaultValue: Sequelize.NOW
     },
     status: Sequelize.ENUM ('open', 'closed')
+}, {
+    hooks: {
+        beforeValidate: (page) => {
+            page.urlTitle = urlFunc(page.title);
+        }
+    }
 });
-
 
 
 const User = db.define('users', {

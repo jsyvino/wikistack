@@ -16,9 +16,9 @@ router.use('/wiki', wiki);
 router.use('/user', user);
 
 
-router.get('/', function(req, res, next) {
-   
-  });
+router.get('/', function (req, res){
+  res.render('index.html')
+})
 
 
 
