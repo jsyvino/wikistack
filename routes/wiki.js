@@ -25,7 +25,12 @@ wiki.get('/add', function(req, res, next) {
 //   res.json(req.body);
 //   });
 
-
+wiki.get('/:title', (req, res, next) =>{
+    Page.findOne({where: {urlTitle: req.params.title}}).then((page)=>{
+    console.log('this is the page urltitle ', page.urlTitle)    
+    res.render('wikipage', { urlTitle: page.urlTitle, content: page.content});
+    })
+});
   
   wiki.post('/', function (req, res, next) {
   
@@ -43,10 +48,12 @@ wiki.get('/add', function(req, res, next) {
     // STUDENT ASSIGNMENT:
     // make sure we only redirect *after* our save is complete!
     // note: `.save` returns a promise or it can take a callback.
-    page.save();
-    let url = urlFunc(page.title);
-    // -> after save -> 
-    res.redirect('/'+url);
+    page.save().then((pageItem) =>{
+        console.log(pageItem);
+        res.redirect('/wiki/'+ pageItem.urlTitle);
+    });
+   
+    
   });
 
 

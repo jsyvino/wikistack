@@ -37,7 +37,7 @@ app.use('/', route);
 
 
 
-models.db.sync({force: true})
+models.db.sync()//({force: true})
 .then(function () {
     console.log('All tables created!');
     app.listen(3000, function () {

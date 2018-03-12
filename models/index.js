@@ -16,10 +16,7 @@ const Page = db.define('pages', {
     urlTitle: {
         type: Sequelize.STRING,
         allowNull: false,
-        get() {
-            const route = this.getDataValue('urlName');
-            return '/wiki/' + route;
-          },
+        
     },
 
     content: {
@@ -31,13 +28,23 @@ const Page = db.define('pages', {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     },
-    status: Sequelize.ENUM ('open', 'closed')
+    status: Sequelize.ENUM ('open', 'closed'),
+    route: {
+        type: Sequelize.VIRTUAL,
+        get() {
+            const route = this.getDataValue('urlTitle');
+            return '/wiki/' + route;
+          },
+    } 
+    
+
 }, {
     hooks: {
         beforeValidate: (page) => {
             page.urlTitle = urlFunc(page.title);
         }
     }
+    
 });
 
 
