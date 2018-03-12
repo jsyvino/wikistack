@@ -5,9 +5,8 @@
   <hr>
   <ul class="list-unstyled">
     <!-- PLACEHOLDER LIST OF PAGES -->
-    {%for page in cats %}
-      <li><a href="{{page.route}}">{{page.title}}</a></li>
-      <!-- <li>{{page.content}}</li> -->
-    {% endfor %}
+    {% for user in users %}
+    <li><a href="/users/{{ user.id }}">{{ user.name }}</a></li>
+  {% endfor %}
   </ul>
 {% endblock %}

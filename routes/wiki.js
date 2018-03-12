@@ -26,8 +26,7 @@ wiki.get('/add', function(req, res, next) {
 //   });
 
 wiki.get('/:title', (req, res, next) =>{
-    Page.findOne({where: {urlTitle: req.params.title}}).then((page)=>{
-    console.log('this is the page urltitle ', page.urlTitle)    
+    Page.findOne({where: {urlTitle: req.params.title}}).then((page)=>{ 
     res.render('wikipage', { urlTitle: page.urlTitle, content: page.content});
     })
 });
@@ -37,21 +36,34 @@ wiki.get('/:title', (req, res, next) =>{
     // STUDENT ASSIGNMENT:
     // add definitions for `title` and `content`
   
-    const page = Page.build({
-      title: req.body.title,
-      content: req.body.content,
-      name: req.body.name,
-      email: req.body.email,
-      status: req.body.status
-    });
+
+    const user = User.findOrCreate(
+      {where: {name: req.body.name, email: req.body.email}
+    }).spread((user, created) => {
+      return Page.create(req.body).then((pageItem)=>{
+        return pageItem.setAuthor(user)
+      })
+    }).then((pageInstance)=> {
+      res.redirect(pageInstance.route);
+    }).catch(next);
+ 
+
+    // const page = Page.build({
+    //   title: req.body.title,
+    //   content: req.body.content,
+    //   status: req.body.status,
+    //   // author: user.id
+    // });
   
     // STUDENT ASSIGNMENT:
     // make sure we only redirect *after* our save is complete!
     // note: `.save` returns a promise or it can take a callback.
-    page.save().then((pageItem) =>{
-        console.log(pageItem);
-        res.redirect('/wiki/'+ pageItem.urlTitle);
-    });
+    // user.save().then((user)=> console.log(user));
+    
+    // page.save().then((pageItem) =>{
+    //     res.redirect(pageItem.route);
+    // })
+    // .catch(next);
    
     
   });

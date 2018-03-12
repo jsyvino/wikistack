@@ -57,12 +57,13 @@ const User = db.define('users', {
     email: {
         type: Sequelize.STRING,
         validate: {
-            isEmail: true,
-            unique: true
+            isEmail: true
         },
         allowNull: false
     }
 });
+
+Page.belongsTo(User, { as: 'author' });
 
 module.exports = {
     Page, 
