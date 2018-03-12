@@ -8,6 +8,8 @@ const models = require('./models');
 //const fs = require('fs');
 const bodyParser = require('body-parser');
 const env = nunjucks.configure('views', { noCache: true }); // where to find the views, caching off
+const route = require('./routes/index.js');
+
 app.set('view engine', 'html'); // what file extension do our templates have
 app.engine('html', nunjucks.render); // how to render html templates
 
@@ -16,9 +18,13 @@ app.use(bodyParser.urlencoded({ extended: true })); // for HTML form submits
 app.use(bodyParser.json()); // would be for AJAX requests
 app.use(express.static('./public'));
 
-app.get('/', function (req, res){
-    res.render('index.html')
-})
+app.use('/', route);
+
+
+
+// app.get('/', function (req, res){
+//     res.render('index.html')
+// })
 
 
 
